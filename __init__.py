@@ -13,6 +13,12 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = "TESTSTRING"
 
+# db initialization
+
+import dbconnection
+import database
+dbconnection.init_db()
+
 def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -37,11 +43,20 @@ def upload_file():
 			return redirect(request.url)
 		json_data = request.files['json']
 		json_thing = json.load(json_data)
-		print("This is an example how to call a first corner location's y-coordinate: " + str(json_thing['cornerLocations'][0][1]))
 
 		# Start analysis
 
-	return "It returns this"
+		#print("This is an example how to call a first corner location's y-coordinate: " + str(json_thing['cornerLocations'][0][1]))
+		print("Coordinate dump length: "+len(json.dump(json_thing['cornerLocations'])))
+		database.recording_entry(
+			"Esko Esimerkki",
+			json.dump(json_thing['cornerLocations'])
+			)
+
+	return "Server is running."
+
+
+print(database.Recording.query.all())
 
 from werkzeug import SharedDataMiddleware
 app.add_url_rule('/uploads/<filename>', 'uploaded_file',
