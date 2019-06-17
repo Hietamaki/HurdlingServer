@@ -16,12 +16,25 @@ app.config['SECRET_KEY'] = "TESTSTRING"
 # db initialization
 
 import dbconnection
-import database
+import models
 dbconnection.init_db()
 
 def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/recordings', methods=['GET'])
+def view_recordings():
+	recordings = models.Recording.query.all()
+	print(type(recordings))
+	s = ""
+
+	for r in recordings:
+		s += r.athlete_name + ", "+r.coordinates+"<br>"
+	# return thumbnail
+	return '<h1>Recordings</h2>' +s
+
+	# return .json file
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -47,16 +60,14 @@ def upload_file():
 		# Start analysis
 
 		#print("This is an example how to call a first corner location's y-coordinate: " + str(json_thing['cornerLocations'][0][1]))
-		print("Coordinate dump length: "+len(json.dump(json_thing['cornerLocations'])))
-		database.recording_entry(
+		print("json dump: "+json.dumps(json_thing['cornerLocations']))
+		models.Recording(
 			"Esko Esimerkki",
-			json.dump(json_thing['cornerLocations'])
+			json.dumps(json_thing['cornerLocations']),
+			filename
 			)
 
 	return "Server is running."
-
-
-print(database.Recording.query.all())
 
 from werkzeug import SharedDataMiddleware
 app.add_url_rule('/uploads/<filename>', 'uploaded_file',

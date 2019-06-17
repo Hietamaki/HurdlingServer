@@ -2,7 +2,7 @@
 #
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
-from dbconnection import Base
+from dbconnection import Base, db_session
 
 class Recording(Base):
 	__tablename__ = 'recordings'
@@ -13,9 +13,15 @@ class Recording(Base):
 	coordinates = Column(String(400))
 	video_name = Column(String(100))
 
-	def __init__(self, athlete_name=None, coordinates=None, video_name):
+	def __init__(self, athlete_name=None, coordinates=None, video_name=None):
 		self.athlete_name = athlete_name
 		self.coordinates = coordinates
 
+		self.save()
+
 	def __repr__(self):
 		return '<Recording %r>' % (self.athlete_name)
+
+	def save(self):
+		db_session.add(self)
+		db_session.commit()
