@@ -1,7 +1,7 @@
 import os
 import time
 import json
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -27,12 +27,12 @@ def allowed_file(filename):
 def view_recordings():
 	recordings = models.Recording.query.all()
 	print(type(recordings))
-	s = ""
+	s = []
 
 	for r in recordings:
-		s += r.athlete_name + ", "+r.coordinates+"<br>"
+		s.append(r.getCollection())
 	# return thumbnail
-	return '<h1>Recordings</h2>' +s
+	return jsonify(s)
 
 	# return .json file
 

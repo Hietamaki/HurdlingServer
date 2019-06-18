@@ -25,3 +25,11 @@ class Recording(Base):
 	def save(self):
 		db_session.add(self)
 		db_session.commit()
+
+	def getCollection(self):
+		return {
+			"athlete_name": self.athlete_name,
+			"coordinates": self.coordinates,
+			"video_name": self.video_name,
+			"time_created": self.time_created
+		}
