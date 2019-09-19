@@ -10,7 +10,7 @@ class Recording(Base):
 	time_created = Column(DateTime(timezone=True), server_default=func.now())
 	time_updated = Column(DateTime(timezone=True), onupdate=func.now())
 	athlete_name = Column(String(50))
-	coordinates = Column(String(400))
+	coordinates = Column(ARRAY(ARRAY(Integer)))
 	video_name = Column(String(100))
 
 	def __init__(self, athlete_name=None, coordinates=None, video_name=None):

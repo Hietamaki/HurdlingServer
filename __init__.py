@@ -62,8 +62,8 @@ def upload_file():
 		#print("This is an example how to call a first corner location's y-coordinate: " + str(json_thing['cornerLocations'][0][1]))
 		print("json dump: "+json.dumps(json_thing['cornerLocations']))
 		models.Recording(
-			"Esko Esimerkki",
-			json.dumps(json_thing['cornerLocations']),
+			"Enni Esimerkki",
+			json_thing['cornerLocations'],
 			filename
 			)
 
